@@ -44,7 +44,7 @@ with st.sidebar:
     use_en = st.checkbox("영어 포함", value=True)
     st.divider()
     st.subheader("불용어 추가하기")
-    extra_stop = st.text_area("쉼표로 구분 (,)", placeholder="예) 영상, 너무, 그냥, the, and")
+    extra_stop = st.text_area("쉼표로 구분 (,)", placeholder="예) 너무, 그냥, the, and")
 
 
 # ===================== 실행 영역 =====================
@@ -148,12 +148,12 @@ if run:
             config = {"width": "content"}
             st.plotly_chart(fig, config=config)
 
-            st.markdown("**워드클라우드**")
+            st.markdown("**자주 언급된 키워드들**")
             wc_img = make_wordcloud_image(dict(freq))
             if wc_img is not None:
                 st.image(wc_img, width="content")
             else:
-                st.caption("워드클라우드를 만들 수 있는 단어가 부족합니다.")
+                st.caption("만들 수 있는 단어가 부족합니다.")
 
     with right:
         st.subheader(f"❤️ TOP{like_comment_num} 좋아요 댓글 차트")
