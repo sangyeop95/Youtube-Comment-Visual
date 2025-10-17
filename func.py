@@ -15,13 +15,14 @@ STOPWORDS_KR = {
     "같아요","너무","정도","그","이","저","것","그건","또","하면","하는","했다","하는데",
     "합니다","에서","으로","에게","보다","까지","뭔가","하다","꾸다","같다","있다","가다",
     "않다","아니다","없다","나오다","되다","오다","자다","이다","받다","들다","보고","여기",
-    "알다","맞다","많다","존나","있는","이게","있는데","이건","다시"
+    "알다","맞다","많다","존나","있는","이게","있는데","이건","다시","영상","이렇다","그렇다"
 }
 STOPWORDS_EN = {
     "the","a","an","and","or","but","if","in","on","at","to","for","of","with","is","are","it","this",
     "that","i","you","he","she","they","we","me","my","your","our","their","so","just","really"
 }
 PART_OF_SPEECH = ("Noun","Adjective","Verb") # 명사, 형용사, 동사 허용
+FONT_PATH = "fonts/malgunbd.ttf" # 워드클라우드에 사용될 글꼴경로
 
 def parse_extra_stopwords(text):
     """추가적으로 불용어를 추가할게 있을 경우 함수 사용"""
@@ -256,7 +257,7 @@ def build_frequency(df: pd.DataFrame,
     return cnt
 
 def make_wordcloud_image(freq_dict: dict,
-                         font_path="C:/Windows/Fonts/malgun.ttf",
+                         font_path=FONT_PATH,
                          width=1200,
                          height=800):
     """워드 클라우드 생성"""
@@ -265,6 +266,6 @@ def make_wordcloud_image(freq_dict: dict,
     wc = WordCloud(width=width,
                    height=height,
                    background_color="white",
-                   ).generate_from_frequencies(freq_dict)
+                   font_path=font_path).generate_from_frequencies(freq_dict)
     img = wc.to_image() # PIL Image로 변환
     return img
