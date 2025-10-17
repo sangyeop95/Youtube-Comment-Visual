@@ -148,7 +148,7 @@ if run:
             st.plotly_chart(fig, config=config)
 
             st.markdown("**자주 언급된 키워드들**")
-            options = list(FONT_LIST.keys())
+            options = sorted(FONT_LIST.keys())
             default_font = "카페24 빛나는별"
             @st.fragment
             def show_wordcloud():
