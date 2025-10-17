@@ -8,6 +8,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from googleapiclient.discovery import build
 from wordcloud import WordCloud
+from pathlib import Path, PureWindowsPath
 
 # ===================== 상수/불용어 =====================
 STOPWORDS_KR = {
@@ -22,7 +23,13 @@ STOPWORDS_EN = {
     "that","i","you","he","she","they","we","me","my","your","our","their","so","just","really"
 }
 PART_OF_SPEECH = ("Noun","Adjective","Verb") # 명사, 형용사, 동사 허용
-FONT_PATH = "fonts/malgunbd.ttf" # 워드클라우드에 사용될 글꼴경로
+
+# ===================== 워드클라우드 폰트 설정 =====================
+FONTS_DIR = Path(__file__).parent / "fonts"
+FONT_LIST = {
+    p.stem: str(PureWindowsPath("fonts") / p.name)
+    for p in FONTS_DIR.glob("*.ttf")
+}
 
 def parse_extra_stopwords(text):
     """추가적으로 불용어를 추가할게 있을 경우 함수 사용"""
@@ -257,7 +264,7 @@ def build_frequency(df: pd.DataFrame,
     return cnt
 
 def make_wordcloud_image(freq_dict: dict,
-                         font_path=FONT_PATH,
+                         font_path: str,
                          width=1200,
                          height=800):
     """워드 클라우드 생성"""
