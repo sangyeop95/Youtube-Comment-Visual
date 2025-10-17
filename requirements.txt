@@ -1,0 +1,11 @@
+plotly~=6.3.1
+dotenv~=0.9.9
+python-dotenv~=1.1.1
+wordcloud~=1.9.4
+numpy~=2.3.3
+matplotlib~=3.10.7
+pillow~=11.3.0
+streamlit~=1.50.0
+pandas~=2.3.3
+konlpy~=0.6.0
+google-api-python-client~=2.184.0
