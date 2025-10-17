@@ -1,5 +1,5 @@
 # Youtube-Comment-Visual
-## master브런치의 파일을 다운받아주세요.
+## master 브런치의 파일을 다운받아주세요.
 
 좀 더 정확한 댓글 키워드 분석을 위해서는 KONLPY의 OKT 형태소 분석 사용을 위해
 
