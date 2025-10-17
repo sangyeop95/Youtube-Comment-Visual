@@ -149,16 +149,26 @@ if run:
             st.plotly_chart(fig, config=config)
 
             st.markdown("**자주 언급된 키워드들**")
-            wc_img = make_wordcloud_image(dict(freq))
-            if wc_img is not None:
-                st.image(wc_img, width="content")
-            else:
-                st.caption("만들 수 있는 단어가 부족합니다.")
+            options = list(FONT_LIST.keys())
+            default_font = "카페24 빛나는별"
+            @st.fragment
+            def show_wordcloud():
+                select_font = st.selectbox("글꼴", 
+                                           options,
+                                           index=options.index(default_font),
+                                           label_visibility="collapsed")
+                select_font_path = FONT_LIST[select_font]
+                wc_img = make_wordcloud_image(dict(freq), font_path=select_font_path)
+                if wc_img is not None:
+                    st.image(wc_img, width="content")
+                else:
+                    st.caption("만들 수 있는 단어가 부족합니다.")
+            show_wordcloud()
 
     with right:
         st.subheader(f"❤️ TOP{like_comment_num} 좋아요 댓글 차트")
         mask = df["is_reply"]
-        df.loc[mask, "text"] = "(대댓글) " + df.loc[mask, "text"]
+        df.loc[mask, "text"] = "<대댓글> " + df.loc[mask, "text"]
         df = df[["like_count", "text", "author", "updated_at"]]
         df.rename(columns={
                 "text": "댓글",
