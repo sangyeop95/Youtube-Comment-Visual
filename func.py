@@ -27,7 +27,7 @@ PART_OF_SPEECH = ("Noun","Adjective","Verb") # 명사, 형용사, 동사 허용
 # ===================== 워드클라우드 폰트 설정 =====================
 FONTS_DIR = Path(__file__).parent / "fonts"
 FONT_LIST = {
-    p.stem: str(PureWindowsPath("fonts") / p.name)
+    p.stem: "fonts/" + p.name
     for p in FONTS_DIR.glob("*.ttf")
 }
 
