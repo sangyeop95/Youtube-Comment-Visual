@@ -12,3 +12,5 @@ KONLPY의 OKT 형태소 분석 사용을 위해
 
 **필요 API키**
 - YOUTUBEDATA API V3
+
+스트림릿 클라우드 앱 접속 URL -> https://youtube-comment-sy95.streamlit.app/
