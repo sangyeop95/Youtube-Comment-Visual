@@ -15,7 +15,7 @@ STOPWORDS_KR = {
     "같아요","너무","정도","그","이","저","것","그건","또","하면","하는","했다","하는데",
     "합니다","에서","으로","에게","보다","까지","뭔가","하다","꾸다","같다","있다","가다",
     "않다","아니다","없다","나오다","되다","오다","자다","이다","받다","들다","보고","여기",
-    "알다","맞다","많다","존나","있는","이게"
+    "알다","맞다","많다","존나","있는","이게","있는데","이건","다시"
 }
 STOPWORDS_EN = {
     "the","a","an","and","or","but","if","in","on","at","to","for","of","with","is","are","it","this",
@@ -265,6 +265,6 @@ def make_wordcloud_image(freq_dict: dict,
     wc = WordCloud(width=width,
                    height=height,
                    background_color="white",
-                   font_path=font_path).generate_from_frequencies(freq_dict)
+                   ).generate_from_frequencies(freq_dict)
     img = wc.to_image() # PIL Image로 변환
     return img
