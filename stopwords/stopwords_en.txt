@@ -1,2 +1,6 @@
-the,a,an,and,or,but,if,in,on,at,to,for,of,with,is,are,it,this,
-that,i,you,he,she,they,we,me,my,your,our,their,so,just,really
+the,a,an,and,or,but,if,in,on,at, # 10단어씩 정렬 (총 59개)
+to,for,of,with,is,are,it,this,that,i,
+you,he,she,they,we,me,my,your,our,their,
+so,just,really,was,not,here,where,one,have,do
+too,be,as,no,very,don,because,all,when,from
+get,only,what,who,did,am,there,how,can

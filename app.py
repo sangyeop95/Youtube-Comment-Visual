@@ -35,7 +35,7 @@ with st.expander("ℹ️ 사용방법", expanded=True):
 with st.sidebar:
     st.header("⚙️ 설정")
     video_url = st.text_input("유튜브 영상 URL", placeholder="https://www.youtube.com/watch?v=...")
-    max_pages = st.number_input("페이지 수", min_value=1, step=1, value=5)
+    max_pages = st.number_input("페이지 수", min_value=1, step=1, value=10)
     fetch_all = st.checkbox("모든 페이지 댓글 분석", value=True)
     like_comment_num = st.slider("좋아요 댓글 수", 10, 100, 33, 5)
     top_n = st.slider("키워드 수", 10, 30, 20, 1)
