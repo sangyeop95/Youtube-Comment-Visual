@@ -161,7 +161,7 @@ if run:
                 if wc_img is not None:
                     st.image(wc_img, width="content")
                 else:
-                    st.caption("만들 수 있는 단어가 부족합니다.")
+                    st.warning("자주 언급된 키워드가 없습니다.")
             show_wordcloud()
 
     with right:
