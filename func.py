@@ -8,35 +8,39 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from googleapiclient.discovery import build
 from wordcloud import WordCloud
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 
-# ===================== 상수/불용어 =====================
-STOPWORDS_KR = {
-    "그리고","그러나","하지만","저희","저는","제가","근데","정말","진짜","그냥","이거","저거",
-    "같아요","너무","정도","그","이","저","것","그건","또","하면","하는","했다","하는데",
-    "합니다","에서","으로","에게","보다","까지","뭔가","하다","꾸다","같다","있다","가다",
-    "않다","아니다","없다","나오다","되다","오다","자다","이다","받다","들다","보고","여기",
-    "알다","맞다","많다","존나","있는","이게","있는데","이건","다시","영상","이렇다","그렇다"
-}
-STOPWORDS_EN = {
-    "the","a","an","and","or","but","if","in","on","at","to","for","of","with","is","are","it","this",
-    "that","i","you","he","she","they","we","me","my","your","our","their","so","just","really"
-}
-PART_OF_SPEECH = ("Noun","Adjective","Verb") # 명사, 형용사, 동사 허용
+FONT_DIR = Path(__file__).parent / "fonts" # 워드클라우드 폰트 경로
+FONT_LIST = {p.stem: "fonts/" + p.name for p in FONT_DIR.glob("*.ttf")}
+PART_OF_SPEECH = ("Noun","Adjective","Verb") # OKT형태소 분석사용시 명사, 형용사, 동사 허용
 
-# ===================== 워드클라우드 폰트 설정 =====================
-FONTS_DIR = Path(__file__).parent / "fonts"
-FONT_LIST = {
-    p.stem: "fonts/" + p.name
-    for p in FONTS_DIR.glob("*.ttf")
-}
+# ===================== 불용어 파일처리 =====================
+@st.cache_data(show_spinner=False)
+def _read_stopwords_file(file_path: str) -> set[str]:
+    """stopwords.txt 파일을 읽어서 _normalize_words() 함수 호출"""
+    text = Path(file_path).read_text(encoding="utf-8", errors="ignore")
+    return _normalize_words(text)
 
-def parse_extra_stopwords(text):
+def _normalize_words(text: str) -> set[str]:
+    """
+    줄 단위로 공백(\s), 주석(#), 특수기호(.,*,$) 제거 후
+    쉼표(,) 또는 줄바꿈으로 단어 분리 후 개행통일 후
+    소문자화 + 공백/중복 제거
+    예) "그리고, 그러나\n하지만 # 주석" -> {"그리고","그러나","하지만"}
+    """
+    lines = []
+    for raw in text.splitlines(): # 1) 줄 단위로 처리
+        line = re.sub(r"\s*#.*$", "", raw).strip()  # 공백, 주석, 특수기호 제거
+        lines.append(line)
+    words = re.split(r"[,\n]+", "\n".join(lines)) # 2) 쉼표&줄바꿈 기준 단어 분리 후 OS마다 다른개행(\r, \r\n) 통일(\n)
+    return {word.strip().lower() for word in words if word.strip()}
+
+def parse_extra_stopwords(text: str) -> set:
     """추가적으로 불용어를 추가할게 있을 경우 함수 사용"""
     if not text.strip():
         return set()
-    items = [t.strip().lower() for t in text.split(",")]
-    return set([t for t in items if t])
+    items = re.split(r"[,\n]+", text)
+    return set([t.strip().lower() for t in items if t])
 
 def extract_video_id(url: str) -> str:
     """
@@ -225,15 +229,17 @@ def okt_tokenize(text: str,
 def build_frequency(df: pd.DataFrame,
                     use_ko=True,
                     use_en=True,
-                    extra_sw=set(),
+                    extra_sw=set,
                     tokenizer="basic",
                     min_len=2,
                     pos_keep=PART_OF_SPEECH,
                     stem=True) -> Counter:
     """
-    텍스트(문장)에 나온 단어마다 갯수를 세아림
+    텍스트(문장)에 나온 단어마다 Counter 객체로 갯수를 세아림
     ex) 안녕: 5, 감사: 3 ...
     """
+    stopwords_kr = _read_stopwords_file("stopwords/stopwords_kr.txt")
+    stopwords_en = _read_stopwords_file("stopwords/stopwords_en.txt")
     cnt = Counter()
     for txt in df["text"]:
         if not isinstance(txt, str):
@@ -253,9 +259,9 @@ def build_frequency(df: pd.DataFrame,
             if is_en and not use_en: # 영어 포함 checkbox False일 경우 필터링
                 continue
 
-            if is_kr and (t in STOPWORDS_KR or t in extra_sw): # 추가적인 한글 불용어 필터
+            if is_kr and (t in stopwords_kr or t in extra_sw): # 추가적인 한글 불용어 필터
                 continue
-            if is_en and (t in STOPWORDS_EN or t in extra_sw): # 추가적인 영어 불용어 필터
+            if is_en and (t in stopwords_en or t in extra_sw): # 추가적인 영어 불용어 필터
                 continue
             if (not is_kr and not is_en) or (t in extra_sw): # 한글,영어가 아닌 것은 스킵
                 continue
@@ -263,6 +269,7 @@ def build_frequency(df: pd.DataFrame,
             cnt[t] += 1
     return cnt
 
+@st.cache_data(show_spinner=False)
 def make_wordcloud_image(freq_dict: dict,
                          font_path: str,
                          width=1200,

@@ -43,7 +43,7 @@ with st.sidebar:
     use_en = st.checkbox("영어 포함", value=True)
     st.divider()
     st.subheader("불용어 추가하기")
-    extra_stop = st.text_area("쉼표로 구분 (,)", placeholder="예) 너무, 그냥, the, and")
+    extra_stop = st.text_area("쉼표나 줄바꿈으로 구분", placeholder="예) 너무, 그냥, the, and")
 
 
 # ===================== 실행 영역 =====================
@@ -135,9 +135,9 @@ if run:
                          y="count",
                          title=f"TOP{top_n} 키워드",
                          custom_data=["word", "count"])
-            fig.update_xaxes(title_text="", tickangle=-50)
+            fig.update_xaxes(title_text="", tickangle=-35)
             fig.update_yaxes(title_text="")
-            fig.update_layout(height=600, margin=dict(l=10, r=10, t=40, b=10))
+            fig.update_layout(height=600)
             fig.update_traces(
                 hovertemplate=(
                     "키워드: <b>%{x}</b><br>"
@@ -170,10 +170,10 @@ if run:
         df.loc[mask, "text"] = "<대댓글> " + df.loc[mask, "text"]
         df = df[["like_count", "text", "author", "updated_at"]]
         df.rename(columns={
+                "like_count": "좋아요",
                 "text": "댓글",
                 "author": "작성자",
-                "updated_at": "작성시각",
-                "like_count": "좋아요"
+                "updated_at": "작성시각"
         }, inplace=True)
         df = df.sort_values("좋아요", ascending=False).head(like_comment_num)
         df.index = pd.RangeIndex(1, len(df)+1)
