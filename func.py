@@ -80,13 +80,13 @@ def time_conversion(time: str):
     t = t.strftime("%Y-%m-%d %H:%M")
     return t
 
-def fetch_video_and_channel(video_id: str) -> dict:
+def fetch_video_and_channel(video_id: str, api_key: str) -> dict:
     """
     영상 정보 & 채널 정보 반환
     영상 정보: 썸네일, 제목, 채널이름, 게시일, 조회수
     채널 정보: 채널 아이콘 썸네일
     """
-    youtube = build(serviceName="youtube", version="v3", developerKey="AIzaSyAtJHZyr1IwUsBRQCo0U4NdsGx9-_ipJVY")
+    youtube = build(serviceName="youtube", version="v3", developerKey=api_key)
 
     video_info = []
 
