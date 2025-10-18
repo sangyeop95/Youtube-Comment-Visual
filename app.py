@@ -81,7 +81,7 @@ if run:
         st.warning("가져온 댓글이 없습니다. (댓글 비활성/제한 가능)")
         st.stop()
 
-    video = fetch_video_and_channel(video_id)
+    video = fetch_video_and_channel(video_id, YOUTUBE_API_KEY)
     video_views = f"{int(video['view_count']):,}"
     video_likes = f"{int(video['like_count']):,}" if video["like_count"] is not None else "비공개/없음"
     df = pd.DataFrame(records)
