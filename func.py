@@ -12,7 +12,7 @@ from pathlib import Path
 
 FONT_DIR = Path(__file__).parent / "fonts" # 워드클라우드 폰트 경로
 FONT_LIST = {p.stem: "fonts/" + p.name for p in FONT_DIR.glob("*.ttf")}
-PART_OF_SPEECH = ("Noun","Adjective","Verb") # OKT형태소 분석사용시 명사, 형용사, 동사 허용
+PART_OF_SPEECH = ("Noun","Adjective","Verb") # OKT형태소 분석사용시 사용할 품사 (명사, 형용사, 동사)
 
 # ===================== 불용어 파일처리 =====================
 @st.cache_data(show_spinner=False)
