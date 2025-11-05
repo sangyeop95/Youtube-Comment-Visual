@@ -1,5 +1,4 @@
 # Youtube-Comment-Visual
-## master 브런치의 파일을 다운받아주세요.
 
 1. 유튜브 영상 댓글 시각화
 2. 좋아요 댓글차트
